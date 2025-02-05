@@ -1,18 +1,13 @@
 import React from 'react';
-import { View, Text, Button, StyleSheet, ImageBackground } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground } from 'react-native';
 
-interface HomeScreenProps {
-  navigation: any;
-}
-
-const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
+const ActivityScreen: React.FC = () => {
   return (
     <ImageBackground
       source={{ uri: 'https://i.pinimg.com/736x/60/7d/25/607d25e4fb5d358df2147f26ed72ea14.jpg' }}
       style={styles.container}
     >
-      <Text>Home Screen</Text>
-      <Button title="Go to Pet Profile" onPress={() => navigation.navigate('PetProfile')} />
+      <Text>Activity Screen</Text>
     </ImageBackground>
   );
 };
@@ -25,4 +20,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default HomeScreen;
+export default ActivityScreen;

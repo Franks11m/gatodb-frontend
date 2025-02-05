@@ -1,75 +1,60 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-} from 'react-native';
-import api from '../api/api'; // Asegúrate de que esta ruta sea correcta
-import { AxiosError } from 'axios'; // Para manejar errores de Axios
+import { View, Text, Button, StyleSheet, TextInput, ImageBackground } from 'react-native';
+import api from '../api/api'; // Asegúrate de importar la instancia de axios
 
-const RegisterScreen: React.FC = ({ navigation }: any) => {
-  const [name, setName] = useState<string>('');
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+interface RegisterScreenProps {
+  navigation: any;
+}
 
-  const handleRegister = async () => {
-    if (!name || !email || !password) {
-      Alert.alert('Error', 'Por favor completa todos los campos.');
+const RegisterScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleRegister = () => {
+    // Verificamos si las credenciales no están vacías
+    if (!username || !password) {
+      alert('Por favor, ingresa un usuario y una contraseña');
       return;
     }
 
-    try {
-      setLoading(true);
-      const response = await api.post('/auth/register', { name, email, password });
-      Alert.alert('Registro exitoso', `Usuario registrado: ${response.data.email}`);
-      navigation.navigate('Login'); // Redirige al login después de registrarse
-    } catch (error) {
-      console.error('Error al registrar:', error);
-
-      if (error instanceof AxiosError && error.response) {
-        Alert.alert('Error', error.response.data.message || 'No se pudo registrar el usuario');
-      } else {
-        Alert.alert('Error', 'Hubo un problema al conectar con el servidor.');
-      }
-    } finally {
-      setLoading(false);
-    }
+    // Hacemos la petición al backend
+    api.post('/register', { username, password })
+      .then((response) => {
+        if (response.data.success) {
+          alert('Registro exitoso');
+          navigation.navigate('Login');
+        } else {
+          alert('Error en el registro');
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert('Error al conectar con el servidor');
+      });
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Registrar Usuario</Text>
+    <ImageBackground
+      source={{ uri: 'https://i.pinimg.com/736x/fd/ae/54/fdae54bad75cdd811313b0e156fe0b9a.jpg' }}
+      style={styles.container}
+    >
+      <Text style={styles.title}>Register Screen</Text>
       <TextInput
         style={styles.input}
-        placeholder="Nombre Completo"
-        value={name}
-        onChangeText={setName}
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
       />
       <TextInput
         style={styles.input}
-        placeholder="Correo Electrónico"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-      />
-      <TextInput
-        style={styles.input}
-        placeholder="Contraseña"
+        placeholder="Password"
+        secureTextEntry
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
       />
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <Button title="Registrar" onPress={handleRegister} />
-      )}
-    </View>
+      <Button title="Register" onPress={handleRegister} />
+      <Button title="Go to Login" onPress={() => navigation.navigate('Login')} />
+    </ImageBackground>
   );
 };
 
@@ -77,19 +62,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 16,
+    alignItems: 'center',
+    padding: 20,
   },
   title: {
     fontSize: 24,
+    color: 'white',
     marginBottom: 20,
-    textAlign: 'center',
   },
   input: {
+    width: '100%',
     height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
+    marginBottom: 10,
+    paddingLeft: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
+    borderRadius: 5,
   },
 });
 

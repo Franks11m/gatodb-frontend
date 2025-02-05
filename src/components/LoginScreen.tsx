@@ -1,86 +1,60 @@
 import React, { useState } from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  Button,
-  StyleSheet,
-  Alert,
-  ActivityIndicator,
-  TouchableOpacity,
-} from 'react-native';
-import api from '../api/api'; // Asegúrate de que esta ruta sea correcta
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { AxiosError } from 'axios'; // Para manejar errores de Axios
+import { View, Text, Button, StyleSheet, TextInput, ImageBackground } from 'react-native';
+import api from '../api/api'; // Asegúrate de importar la instancia de axios
 
-const LoginScreen: React.FC = ({ navigation }: any) => {
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [loading, setLoading] = useState<boolean>(false);
+interface LoginScreenProps {
+  navigation: any;
+}
 
-  const handleLogin = async () => {
-    if (!email || !password) {
-      Alert.alert('Error', 'Por favor completa todos los campos.');
+const LoginScreen: React.FC<LoginScreenProps> = ({ navigation }) => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleLogin = () => {
+    // Verificamos si las credenciales no están vacías
+    if (!username || !password) {
+      alert('Por favor, ingresa tu usuario y contraseña');
       return;
     }
 
-    try {
-      setLoading(true);
-      const response = await api.post('/auth/login', { email, password });
-
-      // Guardar el token en AsyncStorage
-      if (response.data.token) {
-        await AsyncStorage.setItem('userToken', response.data.token);
-      }
-
-      Alert.alert('Login exitoso', `Bienvenido, ${response.data.user.name}`);
-      navigation.navigate('Home'); // Navegar a la pantalla principal
-    } catch (error) {
-      console.error('Error al iniciar sesión:', error);
-
-      if (error instanceof AxiosError) {
-        if (error.response) {
-          Alert.alert('Error', error.response.data.message || 'No se pudo iniciar sesión');
+    // Hacemos la petición al backend
+    api.post('/login', { username, password })
+      .then((response) => {
+        if (response.data.success) {
+          // Si el login es exitoso, navegamos a Home
+          navigation.navigate('Home');
         } else {
-          Alert.alert('Error', 'Hubo un problema al conectar con el servidor.');
+          alert('Credenciales incorrectas');
         }
-      } else {
-        Alert.alert('Error', 'Hubo un error inesperado.');
-      }
-    } finally {
-      setLoading(false);
-    }
+      })
+      .catch((error) => {
+        console.error(error);
+        alert('Error al conectar con el servidor');
+      });
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Iniciar Sesión</Text>
+    <ImageBackground
+      source={{ uri: 'https://i.pinimg.com/736x/60/7d/25/607d25e4fb5d358df2147f26ed72ea14.jpg' }}
+      style={styles.container}
+    >
+      <Text style={styles.title}>Login Screen</Text>
       <TextInput
         style={styles.input}
-        placeholder="Correo Electrónico"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
+        placeholder="Username"
+        value={username}
+        onChangeText={setUsername}
       />
       <TextInput
         style={styles.input}
-        placeholder="Contraseña"
+        placeholder="Password"
+        secureTextEntry
         value={password}
         onChangeText={setPassword}
-        secureTextEntry
       />
-      {loading ? (
-        <ActivityIndicator size="large" color="#0000ff" />
-      ) : (
-        <Button title="Iniciar Sesión" onPress={handleLogin} />
-      )}
-      <TouchableOpacity
-        style={[styles.button, styles.registerButton]}
-        onPress={() => navigation.navigate('Register')} // Redirige a la pantalla de registro
-      >
-        <Text style={styles.buttonText}>Registrarse</Text>
-      </TouchableOpacity>
-    </View>
+      <Button title="Login" onPress={handleLogin} />
+      <Button title="Go to Register" onPress={() => navigation.navigate('Register')} />
+    </ImageBackground>
   );
 };
 
@@ -88,32 +62,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    padding: 16,
+    alignItems: 'center',
+    padding: 20,
   },
   title: {
     fontSize: 24,
+    color: 'white',
     marginBottom: 20,
-    textAlign: 'center',
   },
   input: {
+    width: '100%',
     height: 40,
-    borderColor: '#ccc',
-    borderWidth: 1,
-    marginBottom: 12,
-    paddingHorizontal: 8,
-  },
-  button: {
-    marginTop: 16,
-    padding: 10,
+    marginBottom: 10,
+    paddingLeft: 10,
+    backgroundColor: 'rgba(255, 255, 255, 0.7)',
     borderRadius: 5,
-    alignItems: 'center',
-  },
-  registerButton: {
-    backgroundColor: '#add8e6',
-  },
-  buttonText: {
-    color: '#fff',
-    fontWeight: 'bold',
   },
 });
 

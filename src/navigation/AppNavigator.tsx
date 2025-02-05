@@ -1,37 +1,26 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import { NavigationContainer } from '@react-navigation/native';
-
-// Importar pantallas
 import LoginScreen from '../components/LoginScreen';
 import RegisterScreen from '../components/RegisterScreen';
 import HomeScreen from '../components/HomeScreen';
+import PetProfileScreen from '../components/PetProfileScreen';
+import HeartRateScreen from '../components/HeartRateScreen';
+import ActivityScreen from '../components/ActivityScreen';
+import PetDataScreen from '../components/PetDataScreen';
 
-// Crear el stack de navegación
 const Stack = createStackNavigator();
 
 const AppNavigator: React.FC = () => {
   return (
-    <NavigationContainer>
-      <Stack.Navigator initialRouteName="Login">
-        {/* Cada pantalla se debe declarar con Stack.Screen */}
-        <Stack.Screen
-          name="Login"
-          component={LoginScreen}
-          options={{ title: 'Iniciar Sesión' }}
-        />
-        <Stack.Screen
-          name="Register"
-          component={RegisterScreen}
-          options={{ title: 'Registro' }}
-        />
-        <Stack.Screen
-          name="Home"
-          component={HomeScreen}
-          options={{ title: 'Inicio' }}
-        />
-      </Stack.Navigator>
-    </NavigationContainer>
+    <Stack.Navigator initialRouteName="Login">
+      <Stack.Screen name="Login" component={LoginScreen} />
+      <Stack.Screen name="Register" component={RegisterScreen} />
+      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="PetProfile" component={PetProfileScreen} />
+      <Stack.Screen name="HeartRate" component={HeartRateScreen} />
+      <Stack.Screen name="Activity" component={ActivityScreen} />
+      <Stack.Screen name="PetData" component={PetDataScreen} />
+    </Stack.Navigator>
   );
 };
 
