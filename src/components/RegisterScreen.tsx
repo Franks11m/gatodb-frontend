@@ -15,7 +15,11 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     }
 
     try {
+<<<<<<< Updated upstream
       const response = await axios.post('http://10.0.6.239:3000/auth/register', { name, email, password, username });
+=======
+      const response = await axios.post('http://10.0.7.9:3000/auth/register', { name, email, password, username });
+>>>>>>> Stashed changes
 
       if (response.data) {
         alert('Registro exitoso');
