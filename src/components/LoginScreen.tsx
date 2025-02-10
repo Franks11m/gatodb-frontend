@@ -18,7 +18,7 @@ const LoginScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
     }
 
     try {
-      const response = await axios.post('http://10.0.6.239:3000/auth/login', { email, password });
+      const response = await axios.post('http://10.0.7.9:3000/auth/login', { email, password });
 
       if (response.data.access_token) {
         alert('Login exitoso');
