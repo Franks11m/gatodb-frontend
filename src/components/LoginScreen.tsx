@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TextInput, ImageBackground } from 'react-native';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
 
 interface RegisterScreenProps {
   navigation: any;
@@ -18,17 +16,11 @@ const LoginScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
       alert('Por favor, ingresa tu correo electrónico y contraseña');
       return;
     }
-  
+
     try {
-<<<<<<< Updated upstream
       const response = await axios.post('http://10.0.6.239:3000/auth/login', { email, password });
 
-=======
-      const response = await axios.post('http://10.0.7.9:3000/auth/login', { email, password });
-  
->>>>>>> Stashed changes
       if (response.data.access_token) {
-        await AsyncStorage.setItem('access_token', response.data.access_token);  
         alert('Login exitoso');
         navigation.navigate('Home');
       } else {
