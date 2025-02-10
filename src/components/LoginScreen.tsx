@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Button, StyleSheet, TextInput, Image } from 'react-native';
+import { View, Text, Button, StyleSheet, TextInput, ImageBackground } from 'react-native';
 import axios from 'axios';
 
 interface RegisterScreenProps {
@@ -11,14 +11,14 @@ const LoginScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
   const [password, setPassword] = useState('');
 
   const handleLogin = async () => {
-    console.log("sdfdsf")
+    console.log("sdfdsf");
     if (!email || !password) {
       alert('Por favor, ingresa tu correo electrónico y contraseña');
       return;
     }
 
     try {
-      const response = await axios.post('http://10.0.2.130:3000/auth/login', { email, password });
+      const response = await axios.post('http://10.0.6.239:3000/auth/login', { email, password });
 
       if (response.data.access_token) {
         alert('Login exitoso');
@@ -33,14 +33,10 @@ const LoginScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
   };
 
   return (
-    <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Image
-          source={{ uri: 'https://i.pinimg.com/originals/a5/9a/4e/a59a4e3ab8f5f62c1b9b27159fc66c7d.png' }}
-          style={styles.logo}
-        />
-      </View>
-
+    <ImageBackground 
+      source={{ uri: 'https://i.pinimg.com/736x/1b/d6/5b/1bd65b2c50c4b6226547a2408c0ec5d1.jpg' }} 
+      style={styles.container}
+    >
       <View style={styles.overlay}>
         <Text style={styles.title}>Login</Text>
         <TextInput
@@ -59,29 +55,18 @@ const LoginScreen: React.FC<RegisterScreenProps> = ({ navigation }) => {
         <Button title="Login" onPress={handleLogin} />
         <Button title="Go to Register" onPress={() => navigation.navigate('Register')} />
       </View>
-    </View>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#f5f5dc', // Color crema para el fondo
     justifyContent: 'center',
     alignItems: 'center',
   },
-  logoContainer: {
-    position: 'absolute',
-    left: 20, // Logo alineado a la izquierda
-    top: '30%', // Ajusta la posición vertical según lo que necesites
-  },
-  logo: {
-    width: 100,
-    height: 100,
-    resizeMode: 'contain', // Mantener las proporciones del logo
-  },
   overlay: {
-    backgroundColor: 'rgba(255, 255, 255, 0.8)', // Fondo blanco con transparencia para el formulario
+    backgroundColor: 'rgba(255, 255, 255, 0.8)',
     padding: 20,
     borderRadius: 10,
     alignItems: 'center',

@@ -15,7 +15,7 @@ const RegisterScreen: React.FC<{ navigation: any }> = ({ navigation }) => {
     }
 
     try {
-      const response = await axios.post('http://10.0.2.130:3000/auth/register', { name, email, password, username });
+      const response = await axios.post('http://10.0.6.239:3000/auth/register', { name, email, password, username });
 
       if (response.data) {
         alert('Registro exitoso');
